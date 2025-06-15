@@ -27,6 +27,11 @@ const tasksSlice = createSlice({
         status: 'open',
         assignee: 'karuna',
         createdAt: '2025-06-13T10:00:00Z',
+        timeLogs: [ { date: '2025-06-15', minutes: 30 } ],
+     totalTime: 30,
+    submittedForApproval: false,
+    approved: false,
+
       },
       {
         id: 2,
@@ -60,6 +65,15 @@ const tasksSlice = createSlice({
         saveToStorage(state.items);
       }
     },
+    logTimeToTask: (state, action) => {
+        const { taskId, minutes, date } = action.payload;
+        const task = state.items.find(t => t.id === taskId);
+        if (task) {
+          task.timeLogs.push({ date, minutes });
+          task.totalTime = task.timeLogs.reduce((sum, log) => sum + log.minutes, 0);
+        }
+      }
+      
   },
 });
 

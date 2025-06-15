@@ -1,24 +1,22 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts';
-import dayjs from 'dayjs';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useMemo } from 'react';
 
 export default function Graph() {
-  const tasks = useSelector((state) => state.tasks.items);
+  const { tasks } = useSelector((state) => state.tasks);
 
-  // Group tasks by date
-  const taskCountByDate = tasks.reduce((acc, task) => {
-    const date = dayjs(task.createdAt).format('YYYY-MM-DD');
-    acc[date] = (acc[date] || 0) + 1;
-    return acc;
-  }, {});
+  const chartData = useMemo(() => {
+    const countMap = {};
+    tasks.forEach((task) => {
+      const date = task.createdAt?.split('T')[0]; // format: YYYY-MM-DD
+      if (date) {
+        countMap[date] = (countMap[date] || 0) + 1;
+      }
+    });
+    return Object.entries(countMap).map(([date, count]) => ({ date, count }));
+  }, [tasks]);
 
-  const chartData = Object.entries(taskCountByDate).map(([date, count]) => ({
-    date,
-    count,
-  }));
+  if (!chartData.length) return <p>No task trend data available.</p>;
 
   return (
     <div className="my-6 p-4 bg-white rounded shadow">

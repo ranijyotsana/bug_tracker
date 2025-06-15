@@ -29,7 +29,6 @@ export default function Dashboard() {
         <div>
           {/* Everyone sees task table */}
           <TaskTable />
-          
 
           {/* Only Managers see Graph */}
           {user?.role === 'Manager' && <Graph />}

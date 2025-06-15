@@ -13,8 +13,10 @@ const timeSlice = createSlice({
   reducers: {
     // Action to add a new time log
     addTimeLog: (state, action) => {
-      state.timeLogs.push(action.payload);
-    },
+        console.log('Adding Time Log:', action.payload); // ✅ debug
+        state.timeLogs.push(action.payload);
+      }
+      
   },
 });
 
